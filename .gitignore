@@ -42,7 +42,7 @@ yarn.lock
 package-lock.json
 
 # CoreML models
-*.mlpackage
+# *.mlpackage
 
 # Mac
 *DS_Store*
@@ -54,4 +54,4 @@ assets
 output/
 teacher_embed/
 datasets/
-weights/
+# weights/
