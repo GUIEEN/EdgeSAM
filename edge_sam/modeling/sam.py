@@ -15,7 +15,6 @@ from .prompt_encoder import PromptEncoder
 
 from mmdet.models.dense_heads import RPNHead, CenterNetUpdateHead
 from mmdet.models.necks import FPN
-from projects.EfficientDet import efficientdet
 from mmengine import ConfigDict
 
 class Sam(nn.Module):
@@ -83,34 +82,6 @@ class Sam(nn.Module):
                     type='DeltaXYWHBBoxCoder',
                     target_means=[.0, .0, .0, .0],
                     target_stds=[1.0, 1.0, 1.0, 1.0]),
-            )
-        elif rpn_head == 'efficient_det':
-            norm_cfg = dict(type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01)
-            self.fpn = efficientdet.BiFPN(
-                num_stages=3,
-                in_channels=[96, 192, 384],
-                out_channels=64,
-                start_level=0,
-                norm_cfg=norm_cfg
-            )
-            self.rpn_head = efficientdet.EfficientDetSepBNHead(
-                num_classes=1,
-                num_ins=5,
-                in_channels=64,
-                feat_channels=64,
-                stacked_convs=3,
-                norm_cfg=norm_cfg,
-                anchor_generator=dict(
-                    type='AnchorGenerator',
-                    octave_base_scale=4,
-                    scales_per_octave=3,
-                    ratios=[1.0, 0.5, 2.0],
-                    strides=[8, 16, 32, 64, 128],
-                    center_offset=0.5),
-                bbox_coder=dict(
-                    type='DeltaXYWHBBoxCoder',
-                    target_means=[.0, .0, .0, .0],
-                    target_stds=[1.0, 1.0, 1.0, 1.0])
             )
         self.use_rpn = self.rpn_head is not None
 
